@@ -3,7 +3,7 @@
 ### Smart IoT Air Purifier with Real-Time Air Quality Monitoring
 
 <p align="center">
-  <img src="Code/air sense 02.png" width="100%">
+  <img src="Code/AS.png" width="100%">
 </p>
 
 <p align="center">

@@ -1,116 +1,86 @@
-# 🌍 Air Sense
-
-### Smart IoT Air Purifier with Real-Time Air Quality Monitoring
+# 🌬️ AirSense — The Smartest DIY Air Purifier
 
 <p align="center">
-  <img src="Code/AS.png" width="100%">
+  <img src="Code/AS.png" width="800"/>
+  <br>
+  <em>Real-Time Air Quality Monitoring • Intelligent Purification • Arduino IoT Cloud</em>
 </p>
 
-<p align="center">
-  <strong>Monitor • Analyze • Purify</strong>
-</p>
+# 🎥 Demo Video
 
 <p align="center">
-  <a href="https://youtu.be/aSXS77vslJU">
-    <img src="https://img.shields.io/badge/Watch-Demo%20Video-red?style=for-the-badge&logo=youtube">
+  <a href="https://www.youtube.com/watch?v=aSXS77vslJU">
+    <img src="https://img.youtube.com/vi/aSXS77vslJU/maxresdefault.jpg" width="800"/>
   </a>
-  <img src="https://img.shields.io/badge/ESP32--S3-MCU-blue?style=for-the-badge">
-  <img src="https://img.shields.io/badge/Arduino-IoT%20Cloud-green?style=for-the-badge">
-  <img src="https://img.shields.io/badge/LVGL-GUI-orange?style=for-the-badge">
+  <br>
+  <em>Watch AirSense in Action</em>
+</p>
+
+AirSense is a smart IoT air purifier that continuously monitors indoor air quality and automatically improves it in real time using environmental sensors, cloud connectivity, and HEPA filtration.
+
+---
+
+## 📡 Social & Community Links
+
+<p align="center">
+  <a href="https://youtube.com/@NextBuilder" target="_blank">
+    <img src="https://img.shields.io/badge/YouTube-FF0000?style=flat&logo=youtube&logoColor=white"/>
+  </a>
+  <a href="https://www.instructables.com/member/Next%20Builder%20DIY/" target="_blank">
+    <img src="https://img.shields.io/badge/Instructables-FDBA12?style=flat&logo=instructables&logoColor=black"/>
+  </a>
+  <a href="https://hackster.io/NEXTBUILDER" target="_blank">
+    <img src="https://img.shields.io/badge/Hackster.io-2C9AB7?style=flat&logo=hackster&logoColor=white"/>
+  </a>
+  <a href="https://instagram.com/next_builder" target="_blank">
+    <img src="https://img.shields.io/badge/Instagram-E4405F?style=flat&logo=instagram&logoColor=white"/>
+  </a>
+  <a href="https://smartbuildx.com" target="_blank">
+    <img src="https://img.shields.io/badge/Website-000000?style=flat"/>
+  </a>
 </p>
 
 ---
 
-## 🚀 Overview
+# 🧠 Project Overview
 
-Air Sense is an open-source smart air purifier that combines air quality monitoring, cloud connectivity, and automatic purification in a single device.
+Indoor air pollution is often invisible, making it difficult to know when the air around us becomes unhealthy. AirSense was created to solve this problem by combining air quality monitoring, intelligent automation, cloud connectivity, and air purification into a single open-source platform.
 
-Powered by an ESP32-S3, the system continuously measures PM2.5 dust levels, temperature, humidity, atmospheric pressure, and indoor air quality while displaying live information on a 2.4-inch TFT display and synchronizing data with Arduino IoT Cloud.
+Powered by the ESP32-S3, AirSense continuously measures dust concentration, temperature, humidity, pressure, and indoor air quality using dedicated environmental sensors. The collected data is displayed on a modern TFT dashboard and synchronized with Arduino IoT Cloud, allowing users to monitor and control the purifier remotely from anywhere.
 
-The purifier automatically filters polluted air through a HEPA filtration system and allows remote monitoring and control from anywhere using the Arduino IoT Remote application.
+Designed entirely in Autodesk Fusion 360, the project features a custom 3D-printed enclosure, HEPA filtration system, cloud integration, and a product-level appearance while remaining beginner-friendly and fully open source.
 
 ---
 
-## ✨ Features
+# ✨ Features
 
-- 🌫️ PM2.5 Dust Monitoring
+- 🌫️ Real-Time Dust Monitoring
+- 📊 Air Quality Index (AQI)
 - 🌡️ Temperature Monitoring
 - 💧 Humidity Monitoring
-- 📊 AQI Calculation
+- 🌍 Atmospheric Pressure Monitoring
+- 🫁 Indoor Air Quality Analysis
 - ☁️ Arduino IoT Cloud Integration
-- 📱 Smartphone Dashboard
+- 📱 Smartphone Monitoring & Control
 - ⚡ Automatic Fan Control
-- 🎨 LVGL Graphical User Interface
+- 🎨 LVGL-Based User Interface
+- 🌿 HEPA Air Filtration
 - 🖨️ Custom 3D Printed Enclosure
-- 🌍 Open-Source Hardware & Software
+- 🔧 Modular Design
+- 🚀 Open Source Hardware & Software
 
 ---
 
-## 🛠 Hardware
+# 📚 Full Tutorial
 
-| Component | Description |
-|------------|------------|
-| ESP32-S3 Zero | Main Controller |
-| Sharp GP2Y1010AU0F | Dust Sensor |
-| BME680 | Environmental Sensor |
-| 2.4" TFT Display | User Interface |
-| Relay Module | Fan Control |
-| Xiaomi HEPA Filter | Air Filtration |
-| Anchor 150mm Fan | Air Circulation |
-| 5V Power Supply | System Power |
+👉 https://www.instructables.com/AirSense-the-Smartest-DIY-Air-Purifier/
 
 ---
 
-## 🎥 Demonstration
+# 📜 License
 
-<p align="center">
-  <a href="https://youtu.be/aSXS77vslJU">
-    <img src="Code/air sense 02.png" width="800">
-  </a>
-</p>
-
-<p align="center">
-  <a href="https://youtu.be/aSXS77vslJU">
-    <strong>▶ Watch Full Video</strong>
-  </a>
-</p>
+This project is shared for educational and personal use only. Commercial use is not allowed without permission.
 
 ---
 
-## 📂 Repository Structure
-
-```text
-AirSense/
-│
-├── Code/
-├── CAD Files/
-├── STL Files/
-├── Circuit Diagram/
-├── Images/
-└── README.md
-```
-
----
-
-## 📚 Documentation
-
-Complete build instructions:
-
-👉 Instructables Link
-
----
-
-## 🧑‍💻 Author
-
-**Kishan Pratap Singh**  
-Founder of **Next Builder**
-
-- Website: https://smartbuildx.com
-- YouTube: https://youtube.com/@NextBuilder
-- Instagram: https://instagram.com/next_builder
-
----
-
-## 📜 License
-
-This project is released for educational and personal use.
+> 💬 If you build your own AirSense, I'd love to see it. Share your version, improvements, and ideas with the community! 🚀

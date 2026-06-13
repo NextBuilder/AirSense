@@ -138,7 +138,6 @@ The enclosure wraps around the Xiaomi 4 Lite HEPA filter cylinder. The 150mm fan
 <br/>
 
 ---
-
 <br/>
 
 ## Bill of Materials
@@ -175,25 +174,6 @@ The enclosure wraps around the Xiaomi 4 Lite HEPA filter cylinder. The 150mm fan
 
 <br/>
 
-### Electronics
-
-| Component | Specs | Role |
-|:---|:---|:---|
-| Waveshare ESP32-S3 Zero | Dual-core 240 MHz · Wi-Fi · BT | Main microcontroller |
-| Waveshare 2.4″ ILI9341 LCD | 240 × 320 · SPI | LVGL dashboard display |
-| Waveshare Dust Sensor | PM1.0 / PM2.5 / PM10 | Particulate measurement |
-| Waveshare BME680 Sensor | I²C · Temp · RH · Pressure · VOC | Environmental sensing |
-| Relay Module | 5V coil · 10A 250VAC | Fan switching |
-| 5V 2A AC-DC Adapter | 5V @ 2A regulated | System power supply |
-
-### Mechanical
-
-| Component | Specs | Role |
-|:---|:---|:---|
-| Xiaomi HEPA Filter (4 Lite) | H13 True HEPA · 0.3 µm | Air filtration |
-| Anchor 150mm Exhaust Fan | 220V AC · Smart Air series | Air circulation |
-| 18L Open-Top Steel Dustbin | ~200mm dia · perforated | Structural enclosure body |
-
 > Full BOM with purchase links is in the [Instructables tutorial →](https://www.instructables.com/AirSense-the-Smartest-DIY-Air-Purifier/)
 
 <br/>
@@ -226,33 +206,6 @@ The enclosure wraps around the Xiaomi 4 Lite HEPA filter cylinder. The 150mm fan
 <br/>
 
 ## How It Works
-
-```
-┌──────────────────────────────────────────────────────────┐
-│                      AirSense System                     │
-│                                                          │
-│   ┌──────────────┐     ┌───────────────────────────┐     │
-│   │  Dust Sensor │────▶│                           │     │
-│   └──────────────┘     │        ESP32-S3           │     │
-│   ┌──────────────┐     │                           │     │
-│   │    BME680    │────▶│  · Reads sensors @ 2s     │     │
-│   └──────────────┘     │  · Calculates AQI         │     │
-│                        │  · Renders LVGL UI        │     │
-│                        │  · Syncs IoT Cloud        │     │
-│                        │  · Drives relay           │     │
-│                        └──────┬──────────┬─────────┘     │
-│                               │          │               │
-│                     ┌─────────▼──┐  ┌────▼────────────┐  │
-│                     │  LVGL TFT  │  │ Arduino IoT     │  │
-│                     │  Dashboard │  │ Cloud + App     │  │
-│                     └────────────┘  └────────┬────────┘  │
-│                                              │           │
-│                                     ┌────────▼────────┐  │
-│                                     │  Relay → Fan    │  │
-│                                     │  (auto + manual)│  │
-│                                     └─────────────────┘  │
-└──────────────────────────────────────────────────────────┘
-```
 
 1. Sensors sample every 2 seconds — PM2.5, temperature, humidity, pressure, VOC
 2. ESP32-S3 computes AQI and classifies air quality level

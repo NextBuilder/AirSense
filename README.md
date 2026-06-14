@@ -6,7 +6,7 @@
 
 <br/><br/>
 
-# AirSense
+# Air Sense
 
 **The Smartest DIY Air Purifier — Engineered from Scratch**
 
@@ -18,62 +18,28 @@
 ![Issues](https://img.shields.io/github/issues/NextBuilder/AirSense?style=flat-square&logo=github&logoColor=white&label=Issues&color=0d1117&labelColor=0d1117)
 ![License](https://img.shields.io/badge/Non--Commercial-0d1117?style=flat-square&logo=opensourceinitiative&logoColor=white&labelColor=0d1117)
 
-<br/>
-
-<!-- ════════ TECH STACK ════════ -->
-![ESP32-S3](https://img.shields.io/badge/ESP32--S3-1a0a09?style=for-the-badge&logo=espressif&logoColor=f3a99a&labelColor=1a0a09&color=1a0a09)
-![Arduino IoT Cloud](https://img.shields.io/badge/Arduino_IoT_Cloud-091a12?style=for-the-badge&logo=arduino&logoColor=86e0b8&labelColor=091a12&color=091a12)
-![LVGL](https://img.shields.io/badge/LVGL_UI-0e0a1a?style=for-the-badge&logo=c&logoColor=b9aaff&labelColor=0e0a1a&color=0e0a1a)
-![HEPA](https://img.shields.io/badge/HEPA_Filtration-0a1a14?style=for-the-badge&logoColor=7dddb5&labelColor=0a1a14&color=0a1a14)
-![Fusion360](https://img.shields.io/badge/Fusion_360-1a110a?style=for-the-badge&logo=autodesk&logoColor=f5c97a&labelColor=1a110a&color=1a110a)
-
-<br/>
-
-<!-- ════════ LIBRARIES ════════ -->
-[![TFT_eSPI](https://img.shields.io/badge/TFT__eSPI-0d1117?style=flat-square&logo=github&logoColor=7bcfee&labelColor=0d1117&color=0d1117)](https://github.com/Bodmer/TFT_eSPI)
-[![LVGL](https://img.shields.io/badge/LVGL-0d1117?style=flat-square&logo=github&logoColor=b09bff&labelColor=0d1117&color=0d1117)](https://github.com/lvgl/lvgl)
-[![Adafruit BME680](https://img.shields.io/badge/Adafruit_BME680-0d1117?style=flat-square&logo=github&logoColor=f5a0c5&labelColor=0d1117&color=0d1117)](https://github.com/adafruit/Adafruit_BME680)
-[![ArduinoIoTCloud](https://img.shields.io/badge/ArduinoIoTCloud-0d1117?style=flat-square&logo=github&logoColor=7dddb5&labelColor=0d1117&color=0d1117)](https://github.com/arduino-libraries/ArduinoIoTCloud)
-[![Arduino_ConnectionHandler](https://img.shields.io/badge/Arduino__ConnectionHandler-0d1117?style=flat-square&logo=github&logoColor=7dddb5&labelColor=0d1117&color=0d1117)](https://github.com/arduino-libraries/Arduino_ConnectionHandler)
-
-<br/>
-
-<!-- ════════ SOCIALS ════════ -->
-[![YouTube](https://img.shields.io/badge/YouTube-1a0505?style=for-the-badge&logo=youtube&logoColor=ff7b7b&labelColor=1a0505&color=1a0505)](https://youtube.com/@next.builder)
-[![Instagram](https://img.shields.io/badge/Instagram-1a0a12?style=for-the-badge&logo=instagram&logoColor=f5a0c5&labelColor=1a0a12&color=1a0a12)](https://instagram.com/next_builder)
-[![Twitter](https://img.shields.io/badge/Twitter-0d0d0d?style=for-the-badge&logo=x&logoColor=d0d0d0&labelColor=0d0d0d&color=0d0d0d)](https://x.com/NEXTBUILDERDIY)
-[![Instructables](https://img.shields.io/badge/Instructables-1a1200?style=for-the-badge&logo=instructables&logoColor=ffc84a&labelColor=1a1200&color=1a1200)](https://www.instructables.com/member/Next%20Builder%20DIY/)
-[![Hackster](https://img.shields.io/badge/Hackster.io-051218?style=for-the-badge&logo=hackster&logoColor=6fcfee&labelColor=051218&color=051218)](https://hackster.io/NEXTBUILDER)
-[![Hackaday](https://img.shields.io/badge/Hackaday-111111?style=for-the-badge&logo=hackaday&logoColor=cccccc&labelColor=111111&color=111111)](https://hackaday.io/NextBuilder)
-
-<br/>
-
 </div>
 
 ---
-
 <br/>
 
-## Overview
+## 🌿 Overview
 
-Indoor air pollution is invisible — yet it shapes your sleep, focus, and long-term health. **AirSense** is a fully open-source smart air purifier that continuously monitors your indoor environment and automatically purifies it in real time.
+Indoor air pollution is often invisible, yet it can significantly impact our health and comfort. **AirSense** is an open-source smart air purifier that combines real-time environmental monitoring, intelligent purification, and cloud connectivity into a single device.
 
-Built around the **Waveshare ESP32-S3**, it measures PM2.5 dust concentration, temperature, humidity, atmospheric pressure, and indoor air quality using dedicated environmental sensors. All readings render live on a smooth **LVGL TFT dashboard** set into a custom 3D-printed cylindrical enclosure, and sync to **Arduino IoT Cloud** for remote monitoring and one-tap fan control from your phone.
+Powered by the **Waveshare ESP32-S3**, AirSense continuously measures **PM2.5 dust levels, temperature, humidity, atmospheric pressure, and indoor air quality** using dedicated sensors. Live data is displayed on a modern **LVGL-powered TFT dashboard** and synchronized with **Arduino IoT Cloud**, allowing remote monitoring and fan control from anywhere.
 
-Every part — firmware, schematic, CAD files, and cloud setup — is documented and fully reproducible.
-
+Designed in **Autodesk Fusion**, the system features a custom 3D-printed enclosure, HEPA filtration, automatic fan control, and a product-like user experience. This repository includes everything needed to build your own AirSense, including source code, CAD files, circuit diagrams, and setup instructions.
 <br/>
 
 ---
-
 <br/>
 
 ## Live Display
 
 <div align="center">
 <img src="Images/62.png" width="740"/>
-<br/><br/>
-<sub>LVGL dashboard running live — PM2.5 · AQI · Temperature · Humidity · Feed Rate · Filter Life · WiFi status</sub>
+<br/><br/><sub>AirSense Live Dashboard — PM2.5 Dust · AQI · Temperature · Humidity · Air Quality · Feed Rate · Filter Health · Wi-Fi Status</sub>
 </div>
 
 <br/>
@@ -98,25 +64,11 @@ Every part — firmware, schematic, CAD files, and cloud setup — is documented
 
 <br/>
 
-## Features
+## ✨ Features
 
-| | Feature | Detail |
-|:---:|:---|:---|
-| 🌫️ | **PM2.5 Dust Monitoring** | Real-time particulate concentration — Waveshare dust sensor |
-| 📊 | **Air Quality Index** | AQI calculated live with colour-coded Good / Moderate / Unhealthy states |
-| 🌡️ | **Temperature** | Live °C readout via BME680 |
-| 💧 | **Humidity** | Relative humidity displayed and synced to cloud |
-| 🌍 | **Atmospheric Pressure** | Barometric pressure monitoring |
-| 🫁 | **Indoor Air Quality** | VOC and gas resistance via BME680 |
-| ☁️ | **Arduino IoT Cloud** | Full two-way sync — monitor and control from anywhere |
-| 📱 | **Mobile Control** | Fan toggle via Arduino IoT Remote app |
-| ⚡ | **Auto Fan Control** | Relay activates fan automatically when AQI degrades |
-| 🎨 | **LVGL Dashboard** | Smooth embedded UI on 2.4″ ILI9341 TFT (240 × 320) |
-| 🌿 | **HEPA Filtration** | Xiaomi Air Purifier 4 Lite filter — captures particles to 0.3 µm |
-| 🖨️ | **Custom Enclosure** | Cylindrical body designed in Autodesk Fusion 360 |
-| 🔧 | **Modular** | Easy to assemble, maintain, and upgrade |
-| 🚀 | **Open Source** | Full hardware and software — fork it, build it, improve it |
+**AirSense** combines intelligent air purification, environmental monitoring, and cloud connectivity into a single product-grade device. It continuously monitors **PM2.5 dust levels, AQI, temperature, humidity, atmospheric pressure, and indoor air quality** in real time, presenting all information through a beautiful **LVGL-powered dashboard**. The system uses a **Xiaomi Air Purifier 4 Lite HEPA filter**, capable of capturing up to **99.97% of airborne particles as small as 0.3 μm**, helping create a cleaner and healthier indoor environment.
 
+Built around the **ESP32-S3**, AirSense synchronizes live data with **Arduino IoT Cloud**, enabling remote monitoring and control from anywhere through a smartphone, tablet, or web browser. The custom enclosure, designed in **Autodesk Fusion 360**, delivers a clean product-like appearance while maintaining easy assembly and maintenance. With complete source code, CAD files, circuit diagrams, and documentation included, AirSense is a fully open-source platform designed for learning, customization, and real-world everyday use.
 <br/>
 
 ---
@@ -133,7 +85,7 @@ Every part — firmware, schematic, CAD files, and cloud setup — is documented
 
 <br/>
 
-The enclosure wraps around the Xiaomi 4 Lite HEPA filter cylinder. The 150mm fan mounts on top, pulling air upward through the filter. The TFT display sits flush in a precision side cutout. A stainless steel 18L open-top dustbin forms the structural body — rigid, heat-resistant, and easy to source.
+The enclosure is designed around the **Xiaomi Air Purifier 4 Lite HEPA filter**, creating a compact and efficient airflow path. A **150mm high-airflow fan** is mounted at the top, drawing contaminated air through the filter and exhausting clean air upward. The **2.4-inch TFT display** is seamlessly integrated into a precision-cut side panel for a clean, product-like appearance. An **18L stainless steel dustbin** serves as the main structural body, providing excellent durability, a premium finish, and easy availability for replication.
 
 <br/>
 
@@ -146,7 +98,7 @@ The enclosure wraps around the Xiaomi 4 Lite HEPA filter cylinder. The 150mm fan
 
 <img src="Images/22.png" width="860"/>
 <br/>
-<sub>All electronic components — Dust Sensor · 2.4″ LCD · BME680 · Relay · ESP32-S3 · 5V PSU</sub>
+<sub>All electronic components</sub>
 
 <br/><br/>
 
@@ -187,17 +139,18 @@ The enclosure wraps around the Xiaomi 4 Lite HEPA filter cylinder. The 150mm fan
 <div align="center">
 <img src="Images/54.png" width="820"/>
 <br/><br/>
-<sub>Inside view after complete wiring and assembly — ESP32-S3 · Display · BME680 · Dust Sensor · Relay · PSU · 220V Fan</sub>
+<sub>Inside view after complete wiring and assembly</sub>
 </div>
 
 <br/>
 
-**Wiring notes:**
+**Wiring Notes**
 
-- The relay switches the **220V fan line** — never touch the high-voltage side while powered
-- The dust sensor uses a timed LED pulse pin — follow the sampling interval in the firmware exactly
-- BME680 is on I²C; SDA and SCL are shared without conflicts on ESP32-S3
-- Display is on SPI — CS, DC, RST must match the `#define` values in `User_Setup.h` (TFT_eSPI)
+* The relay switches the **220V AC fan**, so always disconnect mains power before making any wiring changes or performing maintenance.
+* The dust sensor relies on a precise LED pulse timing sequence for accurate measurements. The sampling logic used in the firmware should remain unchanged.
+* The BME680 communicates via the **I²C interface**, using dedicated SDA and SCL connections on the ESP32-S3.
+* The TFT display operates over **SPI**. Ensure all display pins, including CS, DC, and RST, match the assignments defined in the provided `User_Setup.h` file.
+* Before powering the system, verify all power, signal, and ground connections to ensure safe and reliable operation.
 
 <br/>
 
@@ -207,12 +160,11 @@ The enclosure wraps around the Xiaomi 4 Lite HEPA filter cylinder. The 150mm fan
 
 ## How It Works
 
-1. Sensors sample every 2 seconds — PM2.5, temperature, humidity, pressure, VOC
-2. ESP32-S3 computes AQI and classifies air quality level
-3. LVGL renders all values live with colour-coded AQI ring
-4. All data syncs over Wi-Fi to Arduino IoT Cloud
-5. If AQI crosses the threshold, relay fires and fan starts automatically
-6. Fan can also be toggled manually from the Arduino IoT Remote app
+AirSense continuously monitors the surrounding environment using dedicated air quality and environmental sensors. Every few seconds, the system measures **PM2.5 dust concentration, temperature, humidity, atmospheric pressure, and indoor air quality**, providing a real-time view of indoor environmental conditions.
+
+The collected data is processed by the **ESP32-S3**, which calculates the Air Quality Index (AQI) and updates all measurements on the built-in **LVGL-powered dashboard**. Users can instantly view key air quality metrics through a clean and intuitive graphical interface. At the same time, sensor readings are synchronized with **Arduino IoT Cloud** over Wi-Fi, allowing remote monitoring from anywhere using a smartphone, tablet, or web browser.
+
+The purification fan operates continuously to draw air through the **HEPA filtration system**, where dust and airborne particles are captured before clean air is released back into the environment. Users can manually turn the purifier on or off at any time using the **Arduino IoT Remote App**, providing convenient control from anywhere. By combining real-time monitoring, cloud connectivity, and continuous air purification, AirSense helps users better understand and improve the quality of the air they breathe every day.
 
 <br/>
 
@@ -220,74 +172,29 @@ The enclosure wraps around the Xiaomi 4 Lite HEPA filter cylinder. The 150mm fan
 
 <br/>
 
-## Getting Started
+## 📚 Build Guide & Documentation
 
-### 1 — Set Up Arduino IDE
+Want to build your own **AirSense**? Complete step-by-step instructions, cloud configuration, wiring details, assembly photos, and testing procedures are available in the full written tutorials below.
 
-1. Install [Arduino IDE 2](https://www.arduino.cc/en/software)
-2. **File → Preferences** → paste into *Additional Boards Manager URLs*:
-   ```
-   https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
-   ```
-3. **Tools → Board → Boards Manager** → search `esp32` → install **Espressif Systems ESP32**
+Whether you're a beginner exploring IoT and air quality monitoring or an experienced maker looking to customize the design, these guides will walk you through the entire build process from start to finish.
 
-### 2 — Install Libraries
+### Tutorials & Project Documentation
 
-Go to **Tools → Manage Libraries** and install each one:
+* **Instructables**
+  https://www.instructables.com/AirSense-the-Smartest-DIY-Air-Purifier/
 
-| Library | GitHub |
-|:---|:---|
-| TFT_eSPI | [Bodmer/TFT_eSPI](https://github.com/Bodmer/TFT_eSPI) |
-| LVGL | [lvgl/lvgl](https://github.com/lvgl/lvgl) |
-| Adafruit BME680 | [adafruit/Adafruit_BME680](https://github.com/adafruit/Adafruit_BME680) |
-| ArduinoIoTCloud | [arduino-libraries/ArduinoIoTCloud](https://github.com/arduino-libraries/ArduinoIoTCloud) |
-| Arduino_ConnectionHandler | [arduino-libraries/Arduino_ConnectionHandler](https://github.com/arduino-libraries/Arduino_ConnectionHandler) |
+* **Hackster.io**
+  https://www.hackster.io/NEXTBUILDER/airsense-the-smartest-diy-air-purifier-f775f8
 
-> After installing TFT_eSPI, edit `User_Setup.h` inside the library folder to match your display pins and select the ILI9341 driver.
+* **Hackaday.io**
+  https://hackaday.io/project/205928-airsense-the-smartest-diy-air-purifier
 
-### 3 — Configure the Firmware
+* **ElectronicWings**
+  https://www.electronicwings.com/users/NextBuilder/projects/6592/airsense---the-smartest-diy-air-purifier
 
-Open `Code/AirSense.ino` and fill in your credentials:
-
-```cpp
-// Wi-Fi
-const char SSID[]        = "YOUR_WIFI_SSID";
-const char PASS[]        = "YOUR_WIFI_PASSWORD";
-
-// Arduino IoT Cloud
-const char DEVICE_ID[]   = "YOUR_DEVICE_ID";
-const char SECRET_KEY[]  = "YOUR_SECRET_KEY";
-```
-
-Select board: **Tools → Board → ESP32S3 Dev Module** · choose your COM port · click **Upload**
-
-### 4 — Arduino IoT Cloud Setup
-
-1. Sign in at [create.arduino.cc/iot](https://create.arduino.cc/iot)
-2. Create a new **Thing** and add these variables:
-
-| Variable | Type | Direction |
-|:---|:---|:---|
-| `pm25` | `float` | Read |
-| `temperature` | `float` | Read |
-| `humidity` | `float` | Read |
-| `pressure` | `float` | Read |
-| `aqi` | `int` | Read |
-| `fanControl` | `bool` | Read / Write |
-
-3. Copy **Device ID** + **Secret Key** into the firmware
-4. Install **Arduino IoT Remote** on your phone and connect to your Thing
-
-### 5 — Assemble
-
-Follow the wiring diagram and the full step-by-step assembly guide:
-
-**→ [instructables.com/AirSense-the-Smartest-DIY-Air-Purifier](https://www.instructables.com/AirSense-the-Smartest-DIY-Air-Purifier/)**
-
-<br/>
+All project resources, including firmware, CAD models, library configuration files, and circuit diagrams, are available in this GitHub repository.
 
 ---
-
 <br/>
 
 ## License
@@ -318,6 +225,6 @@ Built with ❤️ by **[Next Builder](https://youtube.com/@next.builder)** ·
 
 <br/>
 
-**⭐ Star this repo if it helped you build something awesome ⭐**
+*⭐ Star this repo if it helped you build something awesome ⭐*
 
 </div>

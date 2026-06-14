@@ -12,15 +12,20 @@
 
 <br/>
 
-<!-- ════════ REPO STATS ════════ -->
-![Stars](https://img.shields.io/github/stars/NextBuilder/AirSense?style=flat-square&logo=github&logoColor=white&label=Stars&color=0d1117&labelColor=0d1117)
-![Forks](https://img.shields.io/github/forks/NextBuilder/AirSense?style=flat-square&logo=github&logoColor=white&label=Forks&color=0d1117&labelColor=0d1117)
-![Issues](https://img.shields.io/github/issues/NextBuilder/AirSense?style=flat-square&logo=github&logoColor=white&label=Issues&color=0d1117&labelColor=0d1117)
-![License](https://img.shields.io/badge/Non--Commercial-0d1117?style=flat-square&logo=opensourceinitiative&logoColor=white&labelColor=0d1117)
+[![youtube](https://www.readmecodegen.com/api/social-icon?name=youtube&size=32&shape=circle&reverseBackground=true&textAlignment=horizontal&showText=true&link=https%3A%2F%2Fyoutube.com%2F%40Next.Builder)](https://youtube.com/@Next.Builder)
+[![instagram](https://www.readmecodegen.com/api/social-icon?name=instagram&size=32&shape=circle&reverseBackground=true&textAlignment=horizontal&showText=true&link=https%3A%2F%2Finstagram.com%2Fnext_builder)](https://instagram.com/next_builder)
+[![x](https://www.readmecodegen.com/api/social-icon?name=x&size=34&shape=circle&reverseBackground=true&textAlignment=horizontal&showText=true&link=https%3A%2F%2Fx.com%2FNEXTBUILDERDIY)](https://x.com/NEXTBUILDERDIY)
+[![linkedin](https://www.readmecodegen.com/api/social-icon?name=linkedin&size=32&shape=circle&reverseBackground=true&textAlignment=horizontal&showText=true&textColor=%23ffffff&link=linkedin.com%2Fcompany%2Fnextbuilderdiy)](linkedin.com/company/nextbuilderdiy)
+[![instructables](https://www.readmecodegen.com/api/social-icon?name=instructables&size=30&shape=circle&reverseBackground=true&textAlignment=horizontal&showText=true&link=https%3A%2F%2Fwww.instructables.com%2Fmember%2FNext%2520Builder%2520DIY%2F)](https://www.instructables.com/member/Next%20Builder%20DIY/)
+[![hackster](https://www.readmecodegen.com/api/social-icon?name=hackster&size=30&shape=circle&reverseBackground=true&textAlignment=horizontal&showText=true&link=https%3A%2F%2Fhackster.io%2FNEXTBUILDER)](https://hackster.io/NEXTBUILDER)
+[![hackaday](https://www.readmecodegen.com/api/social-icon?name=hackaday&size=32&shape=circle&reverseBackground=true&textAlignment=horizontal&showText=true&link=https%3A%2F%2Fhackaday.io%2FNextBuilder)](https://hackaday.io/NextBuilder)
+
+<br/>
 
 </div>
 
 ---
+
 <br/>
 
 ## 🌿 Overview
@@ -30,16 +35,19 @@ Indoor air pollution is often invisible, yet it can significantly impact our hea
 Powered by the **Waveshare ESP32-S3**, AirSense continuously measures **PM2.5 dust levels, temperature, humidity, atmospheric pressure, and indoor air quality** using dedicated sensors. Live data is displayed on a modern **LVGL-powered TFT dashboard** and synchronized with **Arduino IoT Cloud**, allowing remote monitoring and fan control from anywhere.
 
 Designed in **Autodesk Fusion**, the system features a custom 3D-printed enclosure, HEPA filtration, automatic fan control, and a product-like user experience. This repository includes everything needed to build your own AirSense, including source code, CAD files, circuit diagrams, and setup instructions.
+
 <br/>
 
 ---
+
 <br/>
 
 ## Live Display
 
 <div align="center">
 <img src="Images/62.png" width="740"/>
-<br/><br/><sub>AirSense Live Dashboard — PM2.5 Dust · AQI · Temperature · Humidity · Air Quality · Feed Rate · Filter Health · Wi-Fi Status</sub>
+<br/><br/>
+<sub>AirSense Live Dashboard — PM2.5 Dust · AQI · Temperature · Humidity · Air Quality · Feed Rate · Filter Health · Wi-Fi Status</sub>
 </div>
 
 <br/>
@@ -69,6 +77,7 @@ Designed in **Autodesk Fusion**, the system features a custom 3D-printed enclosu
 **AirSense** combines intelligent air purification, environmental monitoring, and cloud connectivity into a single product-grade device. It continuously monitors **PM2.5 dust levels, AQI, temperature, humidity, atmospheric pressure, and indoor air quality** in real time, presenting all information through a beautiful **LVGL-powered dashboard**. The system uses a **Xiaomi Air Purifier 4 Lite HEPA filter**, capable of capturing up to **99.97% of airborne particles as small as 0.3 μm**, helping create a cleaner and healthier indoor environment.
 
 Built around the **ESP32-S3**, AirSense synchronizes live data with **Arduino IoT Cloud**, enabling remote monitoring and control from anywhere through a smartphone, tablet, or web browser. The custom enclosure, designed in **Autodesk Fusion 360**, delivers a clean product-like appearance while maintaining easy assembly and maintenance. With complete source code, CAD files, circuit diagrams, and documentation included, AirSense is a fully open-source platform designed for learning, customization, and real-world everyday use.
+
 <br/>
 
 ---
@@ -90,6 +99,7 @@ The enclosure is designed around the **Xiaomi Air Purifier 4 Lite HEPA filter**,
 <br/>
 
 ---
+
 <br/>
 
 ## Bill of Materials
@@ -195,6 +205,7 @@ Whether you're a beginner exploring IoT and air quality monitoring or an experie
 All project resources, including firmware, CAD models, library configuration files, and circuit diagrams, are available in this GitHub repository.
 
 ---
+
 <br/>
 
 ## License
@@ -210,21 +221,9 @@ Commercial use, resale, or redistribution in any product requires explicit writt
 
 <div align="center">
 
-Built with ❤️ by **[Next Builder](https://youtube.com/@next.builder)** ·
+Built with ❤️ by **[Next Builder](https://youtube.com/@next.builder)**
 
 *Built one? Share it. Open an issue, tag us, drop a photo — the community makes this worth building.*
-
-<br/>
-
-[![youtube](https://www.readmecodegen.com/api/social-icon?name=youtube&size=32&shape=circle&reverseBackground=true&textAlignment=horizontal&showText=true&link=https%3A%2F%2Fyoutube.com%2F%40Next.Builder)](https://youtube.com/@Next.Builder)
-[![instagram](https://www.readmecodegen.com/api/social-icon?name=instagram&size=32&shape=circle&reverseBackground=true&textAlignment=horizontal&showText=true&link=https%3A%2F%2Finstagram.com%2Fnext_builder)](https://instagram.com/next_builder)
-[![x](https://www.readmecodegen.com/api/social-icon?name=x&size=34&shape=circle&reverseBackground=true&textAlignment=horizontal&showText=true&link=https%3A%2F%2Fx.com%2FNEXTBUILDERDIY)](https://x.com/NEXTBUILDERDIY)
-[![linkedin](https://www.readmecodegen.com/api/social-icon?name=linkedin&size=32&shape=circle&reverseBackground=true&textAlignment=horizontal&showText=true&textColor=%23ffffff&link=linkedin.com%2Fcompany%2Fnextbuilderdiy)](linkedin.com/company/nextbuilderdiy)
-[![instructables](https://www.readmecodegen.com/api/social-icon?name=instructables&size=30&shape=circle&reverseBackground=true&textAlignment=horizontal&showText=true&link=https%3A%2F%2Fwww.instructables.com%2Fmember%2FNext%2520Builder%2520DIY%2F)](https://www.instructables.com/member/Next%20Builder%20DIY/)
-[![hackster](https://www.readmecodegen.com/api/social-icon?name=hackster&size=30&shape=circle&reverseBackground=true&textAlignment=horizontal&showText=true&link=https%3A%2F%2Fhackster.io%2FNEXTBUILDER)](https://hackster.io/NEXTBUILDER)
-[![hackaday](https://www.readmecodegen.com/api/social-icon?name=hackaday&size=32&shape=circle&reverseBackground=true&textAlignment=horizontal&showText=true&link=https%3A%2F%2Fhackaday.io%2FNextBuilder)](https://hackaday.io/NextBuilder)
-
-<br/>
 
 *⭐ Star this repo if it helped you build something awesome ⭐*
 

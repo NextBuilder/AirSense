@@ -17,27 +17,61 @@
 #include <ArduinoIoTCloud.h>
 #include <Arduino_ConnectionHandler.h>
 
-// ── WiFi credentials ────────────────────────────────
-const char SSID[] = "YOUR_WIFI_SSID";       
-const char PASS[] = "YOUR_WIFI_PASSWORD";    
+// ═══════════════════════════════════════════════════════════════
+//  CONFIGURATION
+// ═══════════════════════════════════════════════════════════════
+
+// ── WiFi ──────────────────────────────────────────────────────
+const char SSID[] = "Airtel_Nirmala Maa";
+const char PASS[] = "Air@8090";
 
 // ── IoT Cloud device credentials ───────────────────
 const char THING_ID[]      = "Your_Client_ID";
 const char DEVICE_LOGIN[]  = "your_device_name";              
 const char DEVICE_KEY[]    = "Your_Client_Secret";
 
-// ── I2C pins for BME680 ──────────────────────────────
-#define BME_SDA  43
-#define BME_SCL  44
+// ── Pin map ───────────────────────────────────────────────────
+#define BME_SDA        43   // BME680 I2C SDA
+#define BME_SCL        44   // BME680 I2C SCL
 
-// ── Sharp GP2Y1010AU0F pins ─────────────────────────
-#define DUST_ILED_PIN  5
-#define DUST_AOUT_PIN  6
+#define DUST_ILED_PIN   5   // Waveshare dust sensor — LED trigger
+#define DUST_AOUT_PIN   6   // Waveshare dust sensor — analog output
 
-// ── Relay pin ──────────────────────────────────────
-#define RELAY_PIN  7
+#define RELAY_PIN       7   // Fan relay
 
-// ── Font fallback (if Inter fonts not generated) ─────
+// ── Polarity configuration ───────────────────────────────────
+#define DUST_LED_ACTIVE_LOW 1
+#if DUST_LED_ACTIVE_LOW
+  #define DUST_LED_ON  LOW
+  #define DUST_LED_OFF HIGH
+#else
+  #define DUST_LED_ON  HIGH
+  #define DUST_LED_OFF LOW
+#endif
+
+#define RELAY_ACTIVE_LOW 0
+#if RELAY_ACTIVE_LOW
+  #define RELAY_ON  LOW
+  #define RELAY_OFF HIGH
+#else
+  #define RELAY_ON  HIGH
+  #define RELAY_OFF LOW
+#endif
+
+// ── Dust sensor calibration ──────────────────────────────────
+#define DUST_SAMPLES                  15      
+#define DUST_SENSITIVITY              200.0f  
+#define DUST_SMOOTHING_ALPHA          0.3f    
+#define DUST_DEFAULT_BASELINE         0.60f   
+#define DUST_FLOOR_ADAPT_RATE         0.01f   
+#define DUST_BOARD_VOLTAGE_MULTIPLIER 10.0f  
+#define DUST_DEBUG                    1       
+
+// ── BME680 gas sensor ─────────────────────────────────────────
+#define BME_WARMUP_MS       300000UL  
+#define IAQ_SMOOTHING_ALPHA 0.1f      
+
+// ── Font fallback (if Inter fonts aren't generated) ──────────
 #ifndef INTER_FONTS_AVAILABLE
   #define inter_bold_32    lv_font_montserrat_28
   #define inter_medium_14  lv_font_montserrat_10
@@ -45,9 +79,9 @@ const char DEVICE_KEY[]    = "Your_Client_Secret";
   #define inter_regular_16 lv_font_montserrat_14
 #endif
 
-// ════════════════════════════════════════════════════════════
-//  DATA STRUCTURES & HELPERS
-// ════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
+//  DATA TYPES & AQI LOGIC
+// ═══════════════════════════════════════════════════════════════
 
 typedef struct {
   float pm25, temperature, humidity, pressure, iaq, filterLife;
@@ -57,7 +91,7 @@ typedef struct {
 
 typedef struct { const char *label; lv_color_t color; } AQIStatus;
 
-// EPA categories with shortened text to fit circle
+// EPA AQI categories, label text shortened to fit the dashboard circle.
 static inline AQIStatus getAQIStatus(int aqi) {
   if (aqi <=  50) return {"Good",          lv_color_make(  0,228,  0)};   // Green
   if (aqi <= 100) return {"Moderate",      lv_color_make(255,255,  0)};   // Yellow
@@ -68,19 +102,23 @@ static inline AQIStatus getAQIStatus(int aqi) {
   return              {"Hazardous",         lv_color_make(126,  0, 35)};    // Maroon
 }
 
+// EPA PM2.5 breakpoint table, extended through the Hazardous band
+// (AQI 500) so severe pollution days display correctly.
 static inline int calcAQI(float pm25, float iaq) {
   int p = 0;
-  if      (pm25 <= 12.f)   p = (int)(pm25/12.f*50);
-  else if (pm25 <= 35.4f)  p = 51  + (int)((pm25-12.1f)/23.3f*49);
-  else if (pm25 <= 55.4f)  p = 101 + (int)((pm25-35.5f)/19.9f*49);
-  else if (pm25 <= 150.4f) p = 151 + (int)((pm25-55.5f)/94.9f*49);
-  else p = 201;
+  if      (pm25 <= 12.0f)   p = (int)(pm25 / 12.0f * 50);
+  else if (pm25 <= 35.4f)   p = 51  + (int)((pm25 - 12.1f)  / 23.3f  * 49);
+  else if (pm25 <= 55.4f)   p = 101 + (int)((pm25 - 35.5f)  / 19.9f  * 49);
+  else if (pm25 <= 150.4f)  p = 151 + (int)((pm25 - 55.5f)  / 94.9f  * 49);
+  else if (pm25 <= 250.4f)  p = 201 + (int)((pm25 - 150.5f) / 99.9f  * 99);
+  else if (pm25 <= 500.4f)  p = 301 + (int)((pm25 - 250.5f) / 249.9f * 199);
+  else                      p = 500;
   return (int)(p*0.7f + (100.f-iaq)*1.5f*0.3f);
 }
 
-// ════════════════════════════════════════════════════════════
-//  COLOUR PALETTE & LAYOUT
-// ════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
+//  UI THEME & LAYOUT CONSTANTS
+// ═══════════════════════════════════════════════════════════════
 
 #define CB    lv_color_hex(0x050505)
 #define CC    lv_color_hex(0x111111)
@@ -107,13 +145,13 @@ static inline int calcAQI(float pm25, float iaq) {
 #define AQI_CY   86
 #define AQI_R   109
 
-// ════════════════════════════════════════════════════════════
-//  DISPLAY & LVGL SETUP
-// ════════════════════════════════════════════════════════════
-
 #define SCREEN_W 320
 #define SCREEN_H 240
 #define BUF_SIZE (SCREEN_W * 24)
+
+// ═══════════════════════════════════════════════════════════════
+//  DISPLAY & LVGL CORE
+// ═══════════════════════════════════════════════════════════════
 
 static lv_color_t buf1[BUF_SIZE];
 static lv_color_t buf2[BUF_SIZE];
@@ -138,16 +176,25 @@ void initDisplay() {
 void initLVGL() {
   lv_init();
   lv_display_t *disp = lv_display_create(SCREEN_W, SCREEN_H);
-  lv_display_set_buffers(disp, buf1, buf2, BUF_SIZE, LV_DISPLAY_RENDER_MODE_PARTIAL);
+
+  lv_display_set_buffers(disp, buf1, buf2, sizeof(buf1), LV_DISPLAY_RENDER_MODE_PARTIAL);
   lv_display_set_flush_cb(disp, lvgl_flush_cb);
-  hw_timer_t *tmr = timerBegin(1000000);
+
+#if defined(ESP_ARDUINO_VERSION_MAJOR) && ESP_ARDUINO_VERSION_MAJOR >= 3
+  hw_timer_t *tmr = timerBegin(1000000);          // 1 MHz
   timerAttachInterrupt(tmr, &lvgl_tick);
-  timerAlarm(tmr, 1000, true, 0);
+  timerAlarm(tmr, 1000, true, 0);                 // 1 ms tick
+#else
+  hw_timer_t *tmr = timerBegin(0, 80, true);      // 80MHz 
+  timerAttachInterrupt(tmr, &lvgl_tick, true);
+  timerAlarmWrite(tmr, 1000, true);
+  timerAlarmEnable(tmr);
+#endif
 }
 
-// ════════════════════════════════════════════════════════════
-//  UI HANDLES
-// ════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
+//  UI WIDGET HANDLES
+// ═══════════════════════════════════════════════════════════════
 
 lv_obj_t *ui_glow_arc   = NULL;
 lv_obj_t *ui_aqi_arc    = NULL;
@@ -165,9 +212,9 @@ lv_obj_t *ui_filter_status_label = NULL;
 lv_obj_t *ui_wifi_label = NULL;
 lv_obj_t *ui_wifi_dot   = NULL;
 
-// ════════════════════════════════════════════════════════════
-//  PRIMITIVE DRAWING HELPERS
-// ════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
+//  UI BUILDER HELPERS
+// ═══════════════════════════════════════════════════════════════
 
 static lv_obj_t* mkCard(lv_obj_t *p, lv_coord_t x, lv_coord_t y,
                           lv_coord_t w, lv_coord_t h) {
@@ -225,10 +272,6 @@ static lv_obj_t* mkVal(lv_obj_t *c, const char *v, const char *u,
   return vl;
 }
 
-// ════════════════════════════════════════════════════════════
-//  METRIC CARD BUILDER
-// ════════════════════════════════════════════════════════════
-
 static lv_obj_t* metCard(lv_obj_t *p,
                            lv_coord_t x, lv_coord_t y, lv_coord_t w,
                            const char *ttl,
@@ -245,9 +288,9 @@ static lv_obj_t* metCard(lv_obj_t *p,
   return mkVal(c, val, unit, fnt, unit_fnt, vx, vy, unit_off_x);
 }
 
-// ════════════════════════════════════════════════════════════
-//  AQI CIRCLE (with wrapping status text)
-// ════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
+//  DASHBOARD WIDGETS
+// ═══════════════════════════════════════════════════════════════
 
 static void buildAQI(lv_obj_t *scr, int aqi) {
   AQIStatus st = getAQIStatus(aqi);
@@ -325,10 +368,6 @@ static void buildAQI(lv_obj_t *scr, int aqi) {
   lv_obj_set_pos(ui_aqi_status, XC, cy+15);
 }
 
-// ════════════════════════════════════════════════════════════
-//  WIFI CARD
-// ════════════════════════════════════════════════════════════
-
 static void buildWifi(lv_obj_t *scr, bool conn) {
   lv_obj_t *c = mkCard(scr, XC, Y3, WC, CH);
 
@@ -357,10 +396,6 @@ static void buildWifi(lv_obj_t *scr, bool conn) {
   lv_obj_set_style_text_align(ui_wifi_label, LV_TEXT_ALIGN_CENTER, 0);
 }
 
-// ════════════════════════════════════════════════════════════
-//  CREATE FULL DASHBOARD
-// ════════════════════════════════════════════════════════════
-
 void createDashboard(const SensorData *d) {
   lv_obj_t *scr = lv_screen_active();
   lv_obj_set_style_bg_color(scr, CB,           0);
@@ -369,7 +404,6 @@ void createDashboard(const SensorData *d) {
 
   char b[16];
 
-  // PM2.5
   snprintf(b,16,"%.0f",d->pm25);
   ui_pm25_val = metCard(scr,XL,Y1,CSW,
     "PM2.5",b,"ug/m3",
@@ -377,7 +411,6 @@ void createDashboard(const SensorData *d) {
     9,32,lv_color_hex(0x00DF50),
     9, 26);
 
-  // Temperature
   snprintf(b,16,"%.0f",d->temperature);
   ui_temp_val = metCard(scr,XL,Y2,CSW,
     "TEMPERATURE",b,"\xC2\xB0""C",
@@ -385,7 +418,6 @@ void createDashboard(const SensorData *d) {
     9,32,lv_color_hex(0xFFAA33),
     4, 26);
 
-  // Humidity
   snprintf(b,16,"%.0f",d->humidity);
   ui_hum_val = metCard(scr,XL,Y3,CSW,
     "HUMIDITY",b,"%",
@@ -393,7 +425,6 @@ void createDashboard(const SensorData *d) {
     9,32,lv_color_hex(0x3399FF),
     9, 26);
 
-  // Pressure
   snprintf(b,16,"%.0f",d->pressure);
   ui_pres_val = metCard(scr,XR,Y1,CSW,
     "PRESSURE",b,"hPa",
@@ -401,7 +432,6 @@ void createDashboard(const SensorData *d) {
     7,34,lv_color_hex(0x9977FF),
     9, 37);
 
-  // IAQ / Gas
   snprintf(b,16,"%.0f",d->iaq);
   ui_iaq_val = metCard(scr,XR,Y2,CSW,
     "IAQ / GAS",b,"%",
@@ -409,7 +439,6 @@ void createDashboard(const SensorData *d) {
     9,32,lv_color_hex(0x3399FF),
     9);
 
-  // Filter Life
   snprintf(b,16,"%.0f",d->filterLife);
   ui_filter_val = metCard(scr,XR,Y3,CSW,
     "FILTER LIFE",b,"%",
@@ -417,7 +446,6 @@ void createDashboard(const SensorData *d) {
     9,32,lv_color_hex(0x00DF50),
     9);
 
-  // Warning label below filter value
   lv_obj_t *filterCard = lv_obj_get_parent(ui_filter_val);
   ui_filter_status_label = lv_label_create(filterCard);
   lv_label_set_text(ui_filter_status_label, "");
@@ -427,13 +455,7 @@ void createDashboard(const SensorData *d) {
 
   buildAQI(scr, d->aqi);
   buildWifi(scr, d->wifiConnected);
-
-  Serial.println("[UI] Dashboard v5.2 ready");
 }
-
-// ════════════════════════════════════════════════════════════
-//  UPDATE SENSOR VALUES ON UI
-// ════════════════════════════════════════════════════════════
 
 void updateSensorValues(const SensorData *d) {
   char b[16];
@@ -467,9 +489,9 @@ void updateSensorValues(const SensorData *d) {
       d->wifiConnected?CG:lv_color_hex(0xFF4444), 0);
 }
 
-// ════════════════════════════════════════════════════════════
-//  ANIMATIONS
-// ════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
+//  UI ANIMATIONS
+// ═══════════════════════════════════════════════════════════════
 
 static uint16_t s_glowPhase = 0;
 static uint16_t s_wifiPhase = 0;
@@ -555,39 +577,63 @@ void animateWiFi() {
   lv_obj_set_style_bg_opa(ui_wifi_dot, opa, 0);
 }
 
-// ════════════════════════════════════════════════════════════
-//  SENSOR GLOBALS
-// ════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
+//  SENSORS
+// ═══════════════════════════════════════════════════════════════
 
 Adafruit_BME680 bme;
 bool bme680_ok = false;
 
-// ════════════════════════════════════════════════════════════
-//  DUST SENSOR READING (Sharp GP2Y1010AU0F)
-// ════════════════════════════════════════════════════════════
-
 float readDustSensor() {
-  digitalWrite(DUST_ILED_PIN, HIGH);
-  delayMicroseconds(280);
-  int raw = analogRead(DUST_AOUT_PIN);
-  delayMicroseconds(40);
-  digitalWrite(DUST_ILED_PIN, LOW);
-  delayMicroseconds(9680);
+  uint32_t mvSum = 0;
 
-  float voltage = raw * (3.3f / 4095.0f);
-  float dust_ug = voltage * 200.0f;
-  // dust_ug -= 12.0f; // optional offset
-  if (dust_ug < 0) dust_ug = 0;
-  return dust_ug;
+  for (int i = 0; i < DUST_SAMPLES; i++) {
+    digitalWrite(DUST_ILED_PIN, DUST_LED_ON);
+    delayMicroseconds(280);
+    mvSum += analogReadMilliVolts(DUST_AOUT_PIN);
+    delayMicroseconds(40);
+    digitalWrite(DUST_ILED_PIN, DUST_LED_OFF);
+    delayMicroseconds(9680);   // complete the 10ms sensing cycle
+  }
+
+  float voltage = (mvSum / (float)DUST_SAMPLES) / 1000.0f * DUST_BOARD_VOLTAGE_MULTIPLIER;
+
+  static float baseline = DUST_DEFAULT_BASELINE;
+  if (voltage < baseline) {
+    baseline += DUST_FLOOR_ADAPT_RATE * (voltage - baseline);
+  }
+
+  float dust_ug = (voltage - baseline) * DUST_SENSITIVITY;
+  if (dust_ug < 0)   dust_ug = 0;
+  if (dust_ug > 500) dust_ug = 500;
+
+  static float filtered = -1;
+  if (filtered < 0) filtered = dust_ug;
+  filtered = filtered + DUST_SMOOTHING_ALPHA * (dust_ug - filtered);
+
+#if DUST_DEBUG
+  {
+    const int barWidth = 20;
+    int filled = (int)((filtered / 500.0f) * barWidth);
+    if (filled < 0)         filled = 0;
+    if (filled > barWidth)  filled = barWidth;
+    char bar[barWidth + 1];
+    for (int i = 0; i < barWidth; i++) bar[i] = (i < filled) ? '#' : '-';
+    bar[barWidth] = '\0';
+
+    Serial.printf("[Dust]  V=%5.3fV  Base=%5.3fV  PM2.5=%6.1f ug/m3  [%s]\n",
+                  voltage, baseline, filtered, bar);
+  }
+#endif
+
+  return filtered;
 }
 
-// ════════════════════════════════════════════════════════════
-//  HEPA FILTER LIFE TRACKING
-// ════════════════════════════════════════════════════════════
+// ── HEPA filter life tracking ────────────────────────────────
 
 unsigned long fanRuntimeSeconds = 0;
 unsigned long lastFanSecond     = 0;
-bool fanIsOn                    = true;  // initially true, fan ON
+bool fanIsOn                    = true;
 
 void updateFanRuntime() {
   if (millis() - lastFanSecond >= 1000) {
@@ -604,25 +650,45 @@ float calculateFilterLife() {
   return life;
 }
 
-// ════════════════════════════════════════════════════════════
-//  ARDUINO IoT CLOUD VARIABLES
-// ════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
+//  ARDUINO IOT CLOUD
+// ═══════════════════════════════════════════════════════════════
 
 float DUST;          // PM2.5
 float Humidity;
 float Temperature;
 int   AQI;
-bool  Power;         // fan control
+bool  Power;          // fan control
 
-// Function prototype for onPowerChange
 void onPowerChange();
 
-// Connection handler
 WiFiConnectionHandler ArduinoIoTPreferredConnection(SSID, PASS);
 
-// ════════════════════════════════════════════════════════════
-//  MAIN DATA
-// ════════════════════════════════════════════════════════════
+void initProperties() {
+  ArduinoCloud.setBoardId(DEVICE_LOGIN);
+  ArduinoCloud.setSecretDeviceKey(DEVICE_KEY);
+  ArduinoCloud.setThingId(THING_ID);
+
+  ArduinoCloud.addProperty(DUST,        READ, ON_CHANGE, NULL);
+  ArduinoCloud.addProperty(Humidity,    READ, ON_CHANGE, NULL);
+  ArduinoCloud.addProperty(Temperature, READ, ON_CHANGE, NULL);
+  ArduinoCloud.addProperty(AQI,         READ, ON_CHANGE, NULL);
+  ArduinoCloud.addProperty(Power,       READWRITE, ON_CHANGE, onPowerChange);
+}
+
+void onPowerChange() {
+  if (Power) {
+    digitalWrite(RELAY_PIN, RELAY_ON);
+    fanIsOn = true;
+  } else {
+    digitalWrite(RELAY_PIN, RELAY_OFF);
+    fanIsOn = false;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  MAIN PROGRAM
+// ═══════════════════════════════════════════════════════════════
 
 SensorData g_data = {
   .pm25=0, .temperature=0, .humidity=0,
@@ -634,14 +700,21 @@ unsigned long tSensor=0, tAnim=0;
 
 void setup() {
   Serial.begin(115200);
+  delay(300);
 
-  // 1. Display hardware test (red screen for 1.5 s)
+  Serial.println();
+  Serial.println("========================================================");
+  Serial.println("   AirSense — The Smartest DIY Air Purifier");
+  Serial.println("========================================================");
+
+  // Display self-test
   initDisplay();
   tft.fillScreen(TFT_RED);
   delay(1500);
   tft.fillScreen(TFT_BLACK);
+  Serial.println(" [OK]   Display self-test complete");
 
-  // 2. BME680 – non‑blocking init
+  // BME680
   Wire.begin(BME_SDA, BME_SCL);
   if (bme.begin()) {
     bme680_ok = true;
@@ -650,60 +723,59 @@ void setup() {
     bme.setPressureOversampling(BME680_OS_4X);
     bme.setIIRFilterSize(BME680_FILTER_SIZE_3);
     bme.setGasHeater(320, 150);
-    Serial.println("BME680 initialized");
+    Serial.println(" [OK]   BME680 initialized");
   } else {
-    Serial.println("BME680 not found – using fallback data");
+    Serial.println(" [WARN] BME680 not found - using fallback data");
     bme680_ok = false;
   }
 
-  // 3. Dust sensor pins
+  // Dust sensor
   pinMode(DUST_ILED_PIN, OUTPUT);
-  digitalWrite(DUST_ILED_PIN, LOW);
+  digitalWrite(DUST_ILED_PIN, DUST_LED_OFF);
+  Serial.println(" [OK]   Dust sensor pins ready");
 
-  // 4. Relay pin – fan ON at startup
+  // Fan relay - on at startup
   pinMode(RELAY_PIN, OUTPUT);
-  digitalWrite(RELAY_PIN, HIGH);   // HIGH = fan ON
+  digitalWrite(RELAY_PIN, RELAY_ON);
   fanIsOn = true;
+  Serial.println(" [OK]   Fan relay ON");
 
-  // 5. LVGL & UI
+  // Display + UI
   initLVGL();
   bootAnimation();
   createDashboard(&g_data);
+  Serial.println(" [OK]   Dashboard UI ready");
 
-  // 6. Arduino IoT Cloud – init properties & connect
-  initProperties();                
+  // Arduino IoT Cloud
+  initProperties();
   ArduinoCloud.begin(ArduinoIoTPreferredConnection);
   setDebugMessageLevel(2);
   ArduinoCloud.printDebugInfo();
 
-  Serial.println("[Boot] Ready");
+  Serial.println("========================================================");
+  Serial.println(" Boot complete — entering main loop");
+  Serial.println("========================================================");
+  Serial.println();
 }
 
 void loop() {
   unsigned long now = millis();
 
-  // Arduino IoT Cloud update 
   ArduinoCloud.update();
-
-  // LVGL handler (for display refresh)
   lv_timer_handler();
 
-  // Fan runtime tracking
   updateFanRuntime();
   g_data.filterLife = calculateFilterLife();
 
-  // Animations every 16ms
   if (now - tAnim >= 16) {
     tAnim = now;
     animateGlow();
     animateWiFi();
   }
 
-  // Sensor read & UI update every 2 seconds
   if (now - tSensor >= 2000) {
     tSensor = now;
 
-    // ── BME680 ──
     if (bme680_ok && bme.performReading()) {
       g_data.temperature = bme.temperature;
       g_data.humidity    = bme.humidity;
@@ -714,7 +786,17 @@ void loop() {
       if (gas > 200) iaqPercent = 100;
       else if (gas < 10) iaqPercent = 0;
       else iaqPercent = (gas - 10) * 100.0f / (200.0f - 10.0f);
-      g_data.iaq = constrain(iaqPercent, 0, 100);
+      iaqPercent = constrain(iaqPercent, 0, 100);
+
+      if (now < BME_WARMUP_MS) {
+        
+        g_data.iaq = 50;
+      } else {
+        static float iaqFiltered = -1;
+        if (iaqFiltered < 0) iaqFiltered = iaqPercent;
+        iaqFiltered += IAQ_SMOOTHING_ALPHA * (iaqPercent - iaqFiltered);
+        g_data.iaq = iaqFiltered;
+      }
     } else if (!bme680_ok) {
       g_data.temperature = 0;
       g_data.humidity    = 0;
@@ -722,48 +804,18 @@ void loop() {
       g_data.iaq         = 50;
     }
 
-    // ── Dust sensor ──
-    g_data.pm25 = readDustSensor();
-
-    // ── WiFi status for UI ──
+    g_data.pm25          = readDustSensor();
     g_data.wifiConnected = (WiFi.status() == WL_CONNECTED);
+    g_data.aqi            = calcAQI(g_data.pm25, g_data.iaq);
 
-    // ── AQI ──
-    g_data.aqi = calcAQI(g_data.pm25, g_data.iaq);
-
-    // ── Update UI ──
     updateSensorValues(&g_data);
 
-    // ── Push data to cloud ──
     DUST        = g_data.pm25;
     Temperature = g_data.temperature;
     Humidity    = g_data.humidity;
     AQI         = g_data.aqi;
-    // Power is already synchronized from cloud (not pushed here)
+
   }
 
   delay(4);
-}
-
-// ════════════════════════════════════════════════════════════
-//  IoT Cloud Callback & Property Init
-// ════════════════════════════════════════════════════════════
-
-void onPowerChange() {
-  // Power variable changed from cloud
-  if (Power) {
-    digitalWrite(RELAY_PIN, HIGH);   // turn fan ON
-    fanIsOn = true;
-  } else {
-    digitalWrite(RELAY_PIN, LOW);    // turn fan OFF
-    fanIsOn = false;
-  }
-}
-
-void initProperties() {
-  ArduinoCloud.addProperty(DUST,        READ, ON_CHANGE, NULL);
-  ArduinoCloud.addProperty(Humidity,    READ, ON_CHANGE, NULL);
-  ArduinoCloud.addProperty(Temperature, READ, ON_CHANGE, NULL);
-  ArduinoCloud.addProperty(AQI,         READ, ON_CHANGE, NULL);
-  ArduinoCloud.addProperty(Power,       READWRITE, ON_CHANGE, onPowerChange);
 }
